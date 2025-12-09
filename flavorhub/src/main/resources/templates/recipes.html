@@ -405,7 +405,7 @@
                         </div>
                         <p class="recipe-description">${recipe.description || 'A delicious recipe'}</p>
                         <div class="recipe-footer">
-                            <span class="difficulty ${recipe.difficultyLevel.toLowerCase()}">${recipe.difficultyLevel}</span>
+                            <span class="difficulty ${recipe.difficultyLevel ? recipe.difficultyLevel.toLowerCase() : 'easy'}">${recipe.difficultyLevel || 'Easy'}</span>
                             <a href="/api/recipes/${recipe.id}" class="view-recipe">View Recipe</a>
                         </div>
                     </div>
