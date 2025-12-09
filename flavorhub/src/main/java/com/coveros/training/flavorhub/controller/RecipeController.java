@@ -3,6 +3,10 @@ package com.coveros.training.flavorhub.controller;
 import com.coveros.training.flavorhub.model.Recipe;
 import com.coveros.training.flavorhub.service.RecipeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +24,25 @@ public class RecipeController {
     
     private final RecipeService recipeService;
     
+    /**
+     * Get all recipes with optional pagination
+     * @param page Page number (0-indexed, default 0)
+     * @param size Number of items per page (default 12)
+     * @return List of all recipes or paginated response
+     */
     @GetMapping
-    public ResponseEntity<List<Recipe>> getAllRecipes() {
-        return ResponseEntity.ok(recipeService.getAllRecipes());
+    public ResponseEntity<?> getAllRecipes(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        // If pagination parameters are not provided, return all recipes
+        if (page == null || size == null) {
+            return ResponseEntity.ok(recipeService.getAllRecipes());
+        }
+        
+        // Create pageable with default size of 12 and sort by name
+        Pageable pageable = PageRequest.of(page, size, Sort.by("name").ascending());
+        Page<Recipe> recipePage = recipeService.getAllRecipes(pageable);
+        return ResponseEntity.ok(recipePage);
     }
     
     @GetMapping("/{id}")

@@ -3,6 +3,8 @@ package com.coveros.training.flavorhub.service;
 import com.coveros.training.flavorhub.model.Recipe;
 import com.coveros.training.flavorhub.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,15 @@ public class RecipeService {
     
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
+    }
+    
+    /**
+     * Get all recipes with pagination support
+     * @param pageable Pagination parameters (page number, size, sorting)
+     * @return Page of recipes
+     */
+    public Page<Recipe> getAllRecipes(Pageable pageable) {
+        return recipeRepository.findAll(pageable);
     }
     
     public Optional<Recipe> getRecipeById(Long id) {
